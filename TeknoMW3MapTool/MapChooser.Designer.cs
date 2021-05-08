@@ -64,13 +64,14 @@ namespace TeknoMW3MapTool
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cbArkaden = new System.Windows.Forms.CheckBox();
+            this.btnSave = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cbTJug
             // 
             this.cbTJug.Location = new System.Drawing.Point(338, 455);
             this.cbTJug.Name = "cbTJug";
-            this.cbTJug.Size = new System.Drawing.Size(104, 24);
+            this.cbTJug.Size = new System.Drawing.Size(140, 24);
             this.cbTJug.TabIndex = 65;
             this.cbTJug.Text = "Team Juggernaut";
             this.cbTJug.UseVisualStyleBackColor = true;
@@ -361,11 +362,22 @@ namespace TeknoMW3MapTool
             this.cbArkaden.Text = "Arkaden";
             this.cbArkaden.UseVisualStyleBackColor = true;
             // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(12, 515);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(466, 23);
+            this.btnSave.TabIndex = 66;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
             // MapChooser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 627);
+            this.ClientSize = new System.Drawing.Size(800, 572);
+            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.cbTJug);
             this.Controls.Add(this.cbSnD);
             this.Controls.Add(this.cbTDF);
@@ -403,6 +415,8 @@ namespace TeknoMW3MapTool
             this.Text = "MapChooser";
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Button btnSave;
 
         private System.Windows.Forms.CheckBox cbTJug;
         private System.Windows.Forms.CheckBox cbSnD;
