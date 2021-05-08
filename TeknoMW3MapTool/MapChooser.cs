@@ -34,7 +34,7 @@ namespace TeknoMW3MapTool
 
             var sfd = new SaveFileDialog
             {
-                Filter = " MW3 Maplist (*.dspl)|*.dspl",
+                Filter = "MW3 Maplist (*.dspl)|*.dspl",
                 FilterIndex = 0,
                 Title = "Save Map List",
                 DefaultExt = "dspl",
