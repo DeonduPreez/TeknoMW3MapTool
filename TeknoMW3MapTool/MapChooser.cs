@@ -40,7 +40,8 @@ namespace TeknoMW3MapTool
                 FilterIndex = 0,
                 Title = "Save Map List",
                 DefaultExt = "dspl",
-                FileName = "default"
+                FileName = "default",
+                InitialDirectory = Environment.CurrentDirectory
             };
             var sfdDialogResult = sfd.ShowDialog();
             if (sfdDialogResult != DialogResult.OK || string.IsNullOrWhiteSpace(sfd.FileName))
