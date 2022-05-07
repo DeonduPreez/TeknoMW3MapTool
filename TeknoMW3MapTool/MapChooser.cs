@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Timers;
 using System.Windows.Forms;
@@ -246,21 +247,9 @@ namespace TeknoMW3MapTool
         {
             try
             {
+                CloseUPnPPorts();
                 var clientPort = new Mapping(Protocol.Udp, 27016, 27016);
                 var serverPort = new Mapping(Protocol.Udp, 27017, 27017);
-
-                var clientMapping = device.GetSpecificMapping(clientPort.Protocol, clientPort.PrivatePort);
-                var serverMapping = device.GetSpecificMapping(serverPort.Protocol, serverPort.PrivatePort);
-
-                if (clientMapping != null)
-                {
-                    device.DeletePortMap(clientPort);
-                }
-
-                if (serverMapping != null)
-                {
-                    device.DeletePortMap(serverPort);
-                }
 
                 device.CreatePortMap(clientPort);
                 device.CreatePortMap(serverPort);
@@ -305,8 +294,26 @@ namespace TeknoMW3MapTool
 
         private void btnCloseUPnPPorts_Click(object sender, EventArgs e)
         {
-            device.DeletePortMapAsync(new Mapping(Protocol.Udp, 27016, 27016));
-            device.DeletePortMapAsync(new Mapping(Protocol.Udp, 27017, 27017));
+            CloseUPnPPorts();
+        }
+
+        private void CloseUPnPPorts()
+        {
+            try
+            {
+                device.DeletePortMapAsync(new Mapping(Protocol.Udp, 27016, 27016));
+            }
+            catch (Exception exception)
+            {
+            }
+
+            try
+            {
+                device.DeletePortMapAsync(new Mapping(Protocol.Udp, 27017, 27017));
+            }
+            catch (Exception exception)
+            {
+            }
         }
     }
 }
