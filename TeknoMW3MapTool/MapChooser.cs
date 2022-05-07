@@ -1,15 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Timers;
 using System.Windows.Forms;
+using Mono.Nat;
+using Timer = System.Timers.Timer;
 
 namespace TeknoMW3MapTool
 {
-    public partial class MapChooser : Form
+    partial class MapChooser : Form
     {
+        private INatDevice device = null;
+        private double clientTotalSeconds = 0;
+        private double serverTotalSeconds = 0;
+
         public MapChooser()
         {
             InitializeComponent();
+
+            NatUtility.DeviceFound += DeviceFound;
+            NatUtility.StartDiscovery();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -219,6 +229,84 @@ namespace TeknoMW3MapTool
             }
 
             return gameModes;
+        }
+
+        private void btnOpenUPnPPorts_Click(object sender, EventArgs e)
+        {
+            OpenUPnPPorts();
+        }
+
+        private void DeviceFound(object sender, DeviceEventArgs args)
+        {
+            device = args.Device;
+            NatUtility.DeviceFound -= DeviceFound;
+        }
+
+        private void OpenUPnPPorts()
+        {
+            try
+            {
+                var clientPort = new Mapping(Protocol.Udp, 27016, 27016);
+                var serverPort = new Mapping(Protocol.Udp, 27017, 27017);
+
+                var clientMapping = device.GetSpecificMapping(clientPort.Protocol, clientPort.PrivatePort);
+                var serverMapping = device.GetSpecificMapping(serverPort.Protocol, serverPort.PrivatePort);
+
+                if (clientMapping != null)
+                {
+                    device.DeletePortMap(clientPort);
+                }
+
+                if (serverMapping != null)
+                {
+                    device.DeletePortMap(serverPort);
+                }
+
+                device.CreatePortMap(clientPort);
+                device.CreatePortMap(serverPort);
+
+                // clientMapping = device.GetSpecificMapping(clientPort.Protocol, clientPort.PrivatePort);
+                // serverMapping = device.GetSpecificMapping(serverPort.Protocol, serverPort.PrivatePort);
+                //
+                // clientTotalSeconds = (DateTime.Now - clientMapping.Expiration).TotalSeconds;
+                // serverTotalSeconds = (DateTime.Now - serverMapping.Expiration).TotalSeconds;
+                //
+                // clientTimer.Enabled = true;
+                // clientTimer.Tick += ClientTick;
+                //
+                // serverTimer.Enabled = true;
+                // serverTimer.Tick += ServerTick;
+                //
+                // label3.Visible = true;
+                // label4.Visible = true;
+                // lblClientSeconds.Visible = true;
+                // lblServerSeconds.Visible = true;
+                //
+                // lblClientSeconds.Text = clientTotalSeconds.ToString();
+                // lblServerSeconds.Text = serverTotalSeconds.ToString();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        private void ClientTick(object sender, EventArgs e)
+        {
+            clientTotalSeconds--;
+            lblClientSeconds.Text = clientTotalSeconds.ToString();
+        }
+
+        private void ServerTick(object sender, EventArgs e)
+        {
+            serverTotalSeconds--;
+            lblServerSeconds.Text = serverTotalSeconds.ToString();
+        }
+
+        private void btnCloseUPnPPorts_Click(object sender, EventArgs e)
+        {
+            device.DeletePortMapAsync(new Mapping(Protocol.Udp, 27016, 27016));
+            device.DeletePortMapAsync(new Mapping(Protocol.Udp, 27017, 27017));
         }
     }
 }
